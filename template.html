@@ -209,6 +209,7 @@
                     if (id === 'print-logo-img') {
                         el.src = value;
                     } else {
+                        if (id === 'pr_mrn') return; // Temporarily disabled
                         el.innerHTML = value;
                     }
                 }
