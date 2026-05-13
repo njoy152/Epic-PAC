@@ -213,8 +213,9 @@
                     }
                 }
             }
-            if (data.p_name && data.p_mrn) {
-                document.title = `PAC_${data.p_name.replace(/[^a-zA-Z0-9]/g, '_')}_${data.p_mrn}`;
+            if (data.p_name) {
+                const safeName = data.p_name.replace(/[^a-zA-Z0-9]/g, '_');
+                document.title = data.p_mrn ? `PAC_${safeName}_${data.p_mrn}` : `PAC_${safeName}`;
             }
             document.getElementById('content').classList.add('ready');
         }
