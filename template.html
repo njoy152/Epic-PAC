@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        body { 
+            margin: 0; 
+            padding: 40px 50px; 
+            font-family: Arial, Helvetica, sans-serif; 
+            font-size: 10pt; 
+            color: #000; 
+            background: #fff;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
+            box-sizing: border-box;
+        }
+        * { box-sizing: border-box; }
+        
+        .print-header { display: flex; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
+        .print-header img { height: 55px; margin-right: 20px; }
+        .print-title h1 { font-size: 18pt; margin: 0; color: #000; }
+        .dept-name { margin: 4px 0 0 0; font-size: 11pt; font-weight: bold; color: #444; text-transform: uppercase; }
+        
+        .print-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        .print-table th, .print-table td { border: 1px solid #000; padding: 6px; text-align: left; vertical-align: top; font-size: 10pt; line-height: 1.2; }
+        
+        .col-lbl { background: #f0f0f0 !important; font-weight: bold !important; } 
+        
+        .section-header { font-size: 12pt; font-weight: bold; margin-top: 15px; margin-bottom: 5px; border-bottom: 1px solid #ccc; padding-bottom: 3px; }
+        .footer-sig { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; padding-top: 20px; border-top: 1px solid #000; font-family: 'Georgia', serif; page-break-inside: avoid; }
+        .sig-group { display: flex; align-items: flex-end; gap: 10px; }
+        .signature-line { width: 200px; border-bottom: 1px dotted #000; margin-bottom: 4px; }
+        
+        /* Hide by default until rendered */
+        #content { opacity: 0; transition: opacity 0.2s; }
+        #content.ready { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div class="print-header">
+            <img id="print-logo-img"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='50'%3E%3Crect fill='%2300aab4' width='100' height='50'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'%3EHOSPITAL%3C/text%3E%3C/svg%3E"
+                alt="Logo">
+            <div class="print-title">
+                <h1>Pre-Anesthesia Assessment</h1>
+                <p class="dept-name">CVTS Dept.</p>
+            </div>
+        </div>
+
+        <table class="print-table">
+            <colgroup>
+                <col style="width: 12%">
+                <col style="width: 35%">
+                <col style="width: 9%">
+                <col style="width: 9%">
+                <col style="width: 9%">
+                <col style="width: 9%">
+                <col style="width: 6%">
+                <col style="width: 9%">
+            </colgroup>
+            <tr>
+                <th class="col-lbl">Name</th>
+                <td><span id="pr_name"></span></td>
+                <th class="col-lbl">Age</th>
+                <td><span id="pr_age"></span></td>
+                <th class="col-lbl">Sex</th>
+                <td><span id="pr_sex"></span></td>
+                <th class="col-lbl">MRN</th>
+                <td><span id="pr_mrn"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Diagnosis</th>
+                <td><span id="pr_diag"></span></td>
+                <th class="col-lbl">Height</th>
+                <td><span id="pr_ht"></span> cm</td>
+                <th class="col-lbl">Weight</th>
+                <td><span id="pr_wt"></span> kg</td>
+                <th class="col-lbl">BMI</th>
+                <td><span id="pr_bmi"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Surgery</th>
+                <td colspan="7"><span id="pr_surg"></span></td>
+            </tr>
+        </table>
+
+        <div class="section-header">Clinical History</div>
+        <table class="print-table">
+            <colgroup>
+                <col style="width: 24%">
+                <col style="width: 76%">
+            </colgroup>
+            <tr>
+                <th class="col-lbl">Chief Complaints</th>
+                <td class="col-val"><span id="pr_complaints"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Medical history</th>
+                <td class="col-val"><span id="pr_hx"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">NYHA / METS</th>
+                <td class="col-val"><span id="pr_nyha_mets"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Habits</th>
+                <td class="col-val"><span id="pr_habits"></span></td>
+            </tr>
+        </table>
+
+        <div class="section-header">Examination</div>
+        <table class="print-table">
+            <colgroup>
+                <col style="width: 24%">
+                <col style="width: 76%">
+            </colgroup>
+            <tr>
+                <th class="col-lbl">General Exam</th>
+                <td class="col-val"><span id="pr_gen"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Vital Signs</th>
+                <td class="col-val"><span id="pr_vitals"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Airway Assessment</th>
+                <td class="col-val"><span id="pr_airway"></span></td>
+            </tr>
+
+            <tr>
+                <th class="col-lbl">Respiratory System</th>
+                <td class="col-val"><span id="pr_rs"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Cardiovascular System</th>
+                <td class="col-val"><span id="pr_cvs"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">CNS & Spine</th>
+                <td class="col-val"><span id="pr_cns"></span></td>
+            </tr>
+        </table>
+
+        <div class="section-header">Investigations</div>
+        <table class="print-table">
+            <colgroup>
+                <col style="width: 24%">
+                <col style="width: 76%">
+            </colgroup>
+            <tr>
+                <th class="col-lbl">Laboratory Results</th>
+                <td class="col-val"><span id="pr_labs"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Echocardiography</th>
+                <td class="col-val"><span id="pr_echo"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Angiography (CAG)</th>
+                <td class="col-val"><span id="pr_cag"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">USG / Other</th>
+                <td class="col-val"><span id="pr_usg"></span></td>
+            </tr>
+        </table>
+
+        <div class="section-header">Anesthesia Plan</div>
+        <table class="print-table">
+            <colgroup>
+                <col style="width: 24%">
+                <col style="width: 76%">
+            </colgroup>
+            <tr>
+                <th class="col-lbl">ASA / Risk</th>
+                <td class="col-val"><span id="pr_asa_risk"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Plan</th>
+                <td class="col-val"><span id="pr_plan"></span></td>
+            </tr>
+            <tr>
+                <th class="col-lbl">Orders / Instructions</th>
+                <td class="col-val"><span id="pr_orders"></span></td>
+            </tr>
+        </table>
+
+        <div class="footer-sig">
+            <div><strong>Date:</strong> <span id="pr_date"></span></div>
+            <div class="sig-group"><strong>Anesthesiologist:</strong>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function render(data) {
+            for (const [id, value] of Object.entries(data)) {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id === 'print-logo-img') {
+                        el.src = value;
+                    } else {
+                        el.innerHTML = value;
+                    }
+                }
+            }
+            if (data.p_name && data.p_mrn) {
+                document.title = `PAC_${data.p_name.replace(/[^a-zA-Z0-9]/g, '_')}_${data.p_mrn}`;
+            }
+            document.getElementById('content').classList.add('ready');
+        }
+    </script>
+</body>
+</html>
